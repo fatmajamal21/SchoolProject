@@ -45,28 +45,33 @@ class GradeController extends Controller
             'tag' => 'required',
             'stage' => 'required',
             'status' => 'required',
-
         ], [
-            'name.required' => 'الرجاء إدخال حقل الاسم!',
-            'status.required' => 'الرجاء إدخال حقل الاسم!',
-            'stage.required' => 'الرجاء إدخال حقل المرحلة.',
-            'tag.required' => 'الرجاء إدخال حقل المرحلة.',
+            'name.required' => 'يرجى إدخال حقل الاسم',
+            'status.required' => 'يرجى اختيار الحالة',
+            'stage.required' => 'يرجى إدخال حقل المرحلة',
+            'tag.required' => 'يرجى إدخال حقل المرحلة',
         ]);
 
-        $stage_id = Stage::getIdByTag('p');
+        $stage_id = Stage::getIdByTag($request->tag);
+        // $stage_id = Stage::getIdByTag('p');
+
 
         $status = Grade::getStatusByCode($request->status);
 
         $grade = Grade::query()->where('tag', $request->tag)->first();
 
-        $grade->update([
-            'name' => $request->name,
-            'tag' => $request->tag,
-            'stage_id' => $stage_id,
-            'status' => $status,
 
-        ]);
-
-        return 'تم الإضافة بنجاح!';
+        if ($grade) {
+            $grade->update([
+                'name' => $request->name,
+                'tag' => $request->tag,
+                'stage_id' => $stage_id,
+                'status' => $request->status,
+            ]);
+            return response()->json(['message' => 'Grade updated successfully']);
+        } else {
+            return response()->json(['error' => 'Grade not found'], 404);
+        }
+        // return 'تم الإضافة بنجاح!';
     }
 }

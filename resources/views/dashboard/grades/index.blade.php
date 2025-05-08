@@ -219,28 +219,38 @@ url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
       $(target).find('input[type=checkbox]').prop('disabled', false); // تمكين التشيك بوكسات
     }
   });
+
+
     $('input[type=checkbox]').on('change', function () {
-        var checkbox = $(this);
-        var ischeck = checkbox.is(':checked') ? 1 : 0;
+      var checkbox = $(this);
+        var isChecked = checkbox.is(':checked') ? 1 : 0;
         var stage = checkbox.data('stage');
         var tag = checkbox.data('grade');
         var name = checkbox.data('name');
+
         $.ajax({
             url: "{{ route('dash.grade.add') }}",
             type: "POST",
             data: {
-              'stage' : stage,
-                'tag' : tag,
-                'name' : name,
-                'status' : status ,
-                '_token' : "{{ csrf_token() }}",
+
+              stage: stage,
+                tag: tag,
+                name: name,
+                status  : status
+                _token: "{{ csrf_token() }}"
+
+              // 'stage' : stage,
+              //   'tag' : tag,
+              //   'name' : name,
+              //   // 'status' : status ,
+              //   _token: '{{ csrf_token() }}',
        },
-            success: function(res) {
-              console.log(res.message);
+      success: function (res) {
+                console.log(res.message);
             },
-            error: function(res) {
-           alert('حدث مشكلة في الكود ')
-    },
+            error: function (res) {
+                alert('حدث مشكلة في الكود');
+            }
         });
     });
 

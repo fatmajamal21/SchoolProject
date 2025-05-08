@@ -9,7 +9,7 @@ class Grade extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    function stage()
+    public function stage()
     {
         return $this->belongsTo(Stage::class);
     }

@@ -10,9 +10,20 @@ class Stage extends Model
     use HasFactory;
     protected $guarded = [];
 
+    // public static function getIdByTag($tag)
+    // {
+    //     $stage = self::query()->where('tag', $tag)->first();
+    //     return $stage->id;
+    // }
+
     public static function getIdByTag($tag)
     {
         $stage = self::query()->where('tag', $tag)->first();
+
+        if (!$stage) {
+            return null;
+        }
+
         return $stage->id;
     }
 }

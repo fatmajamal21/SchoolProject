@@ -25,7 +25,7 @@ class StageCotroller extends Controller
 
     public function add(Request $request)
     {
-        // dd($request->all());
+        dd($request->all());
 
         $request->validate(
             [
