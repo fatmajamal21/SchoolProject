@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'الصف الأول',
         //     'stage_id' => $stagep,
         //     'tag' => '1',
+
         // ]);
     }
 }

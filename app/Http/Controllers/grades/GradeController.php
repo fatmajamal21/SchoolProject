@@ -45,6 +45,7 @@ class GradeController extends Controller
             'tag' => 'required',
             'stage' => 'required',
             'status' => 'required',
+
         ], [
             'name.required' => 'الرجاء إدخال حقل الاسم!',
             'status.required' => 'الرجاء إدخال حقل الاسم!',
@@ -53,13 +54,17 @@ class GradeController extends Controller
         ]);
 
         $stage_id = Stage::getIdByTag('p');
+
         $status = Grade::getStatusByCode($request->status);
+
         $grade = Grade::query()->where('tag', $request->tag)->first();
+
         $grade->update([
             'name' => $request->name,
             'tag' => $request->tag,
             'stage_id' => $stage_id,
             'status' => $status,
+
         ]);
 
         return 'تم الإضافة بنجاح!';

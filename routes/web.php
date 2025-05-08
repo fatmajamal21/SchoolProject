@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/', function () {
+    return view('welcome');
+});
 //url : learnschool/dashboard/grades
 // name : dash.grade.index
 Route::prefix('SchoolProject/')->group(function () {
