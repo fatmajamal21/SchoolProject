@@ -35,19 +35,24 @@
     </div>
 @endif
 
-              <form id="formcreate" >
-                <label style="font-size: 17px;" class="mb-3">اسم المستوي</label>
-                <input id="name" name="name" class="form-control mb-3" type="text" placeholder="اسم المستوي" />
-                <label style="font-size: 17px;" class="mb-3" for="stage">المرحلة</label>
-                <select id="stage" name="stage" class="form-control mb-3">
-                    <option selected disabled>اختر المرحلة</option>
-                    @foreach ($stages as $stage)
-                        <option value="{{ $stage->id }}">{{ $stage->name }}</option>
-                    @endforeach
-                </select>
-            
-                <button type="submit" class="form-control mb-3 btn btn-outline-primary">إنشاء</button>
-            </form>
+<form id="formcreate">
+    <label style="font-size: 17px;" class="mb-3">اسم المستوي</label>
+    <input id="name" name="name" class="form-control mb-3" type="text" placeholder="اسم المستوي" />
+
+    <label style="font-size: 17px;" class="mb-3" for="stage">المرحلة</label>
+    <select id="stage" name="stage" class="form-control mb-3">
+        <option selected disabled>اختر المرحلة</option>
+        <option value="1">المرحلة الابتدائية</option>
+        <option value="2">المرحلة الإعدادية</option>
+        <option value="3">المرحلة الثانوية</option>
+        @foreach ($stages as $stage)
+            <option value="{{ $stage->id }}">{{ $stage->name }}</option>
+        @endforeach
+    </select>
+
+    <button type="submit" class="form-control mb-3 btn btn-outline-primary">إنشاء</button>
+</form>
+
             
         </div>
       </div>

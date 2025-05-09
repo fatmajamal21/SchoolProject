@@ -233,17 +233,11 @@ url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
             type: "POST",
             data: {
 
-              stage: stage,
-                tag: tag,
-                name: name,
-                status  : status
-                _token: "{{ csrf_token() }}"
-
-              // 'stage' : stage,
-              //   'tag' : tag,
-              //   'name' : name,
-              //   // 'status' : status ,
-              //   _token: '{{ csrf_token() }}',
+              'stage': stage,
+               'tag': tag,
+               'name': name,
+               'status'  : status ,
+                _token: '{{ csrf_token() }}'
        },
       success: function (res) {
                 console.log(res.message);
