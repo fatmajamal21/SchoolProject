@@ -77,8 +77,9 @@
     type: 'POST',
     data: {
         _token: '{{ csrf_token() }}',
-        name: name,
-        stage: stage
+        'stage': stage,
+               'name': name,
+                '_token' : "{{ csrf_token() }}"
     },
     success: function(res) {
        alert(res);

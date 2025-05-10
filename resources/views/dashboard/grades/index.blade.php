@@ -234,10 +234,10 @@ url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
             data: {
 
               'stage': stage,
-               'tag': tag,
                'name': name,
+               'tag': tag,
                'status'  : status ,
-                _token: '{{ csrf_token() }}'
+                '_token' : "{{ csrf_token() }}"
        },
       success: function (res) {
                 console.log(res.message);
