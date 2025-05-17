@@ -25,26 +25,21 @@ class StageCotroller extends Controller
 
     public function add(Request $request)
     {
-        dd($request->all());
-
+        // dd($request->all());
         $request->validate(
             [
-                'name' => 'required|unique:grades,name',
+                'name' => 'required',
                 'stage' => 'required',
             ],
             [
-                'name.required' => 'الرجاء إدخال حقل الاسم!',
-                'name.unique' => 'الرجاء إدخال اسم غير مكرر.',
-                'stage.required' => 'الرجاء إدخال حقل المرحلة.',
+                'name.required' => 'الرجاء إدخال حقل الاسم',
+                'stage.required' => 'الرجاء إدخال حقل المرحلة',
             ]
         );
-
         Grade::create([
             'name' => $request->name,
             'stage_id' => $request->stage,
         ]);
-
-
         return 'تم الإضافة بنجاح!';
     }
 }

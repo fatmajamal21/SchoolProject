@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\grades\GradeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\section\SectionController;
 use App\Http\Controllers\stages\StageCotroller;
 use Illuminate\Support\Facades\Route;
 
@@ -15,14 +16,35 @@ Route::get('/', function () {
 // name : dash.grade.index
 Route::prefix('SchoolProject/')->group(function () {
     Route::prefix('dashboard/')->name('dash.')->group(function () {
+
         Route::prefix('grades/')->controller(GradeController::class)->name('grade.')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/getdata', 'getdata')->name('getdata');
+            Route::get('/getactive', 'getactive')->name('getactive');
+            Route::get('/getactivesection', 'getactivesection')->name('getactivesection');
+            Route::get('/getactivestage', 'getactivestage')->name('getactivestage');
             Route::get('/create', 'create')->name('create');
             Route::post('/add', 'add')->name('add');
+            Route::post('/addsection', 'addsection')->name('addsection');
+            Route::post('/changemaster', 'changemaster')->name('changemaster');
+        });
+
+
+        Route::prefix('sections/')->controller(SectionController::class)->name('section.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/getSectionsData', 'getSectionsData')->name('getSectionsData');
+            Route::get('/getdata', 'getdata')->name('getdata');
+            Route::get('/getactive', 'getactive')->name('getactive');
+            Route::get('/getactivesection', 'getactivesection')->name('getactivesection');
+            Route::get('/getactivestage', 'getactivestage')->name('getactivestage');
+            Route::get('/create', 'create')->name('create');
+            Route::post('/add', 'add')->name('add');
+            Route::post('/addsection', 'addsection')->name('addsection');
+            Route::post('/changemaster', 'changemaster')->name('changemaster');
         });
     });
 });
+
 
 
 

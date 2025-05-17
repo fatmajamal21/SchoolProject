@@ -15,7 +15,7 @@ class Grade extends Model
     }
     public static function getStatusByCode($status)
     {
-        if ($status == 1) {
+        if ($status == '1') {
             return 'active';
         }
         return 'inactive';

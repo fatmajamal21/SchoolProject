@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->foreignId('stage_id')->constrained('stages')->cascadeOnDelete();
+            // $table->enum('status', ['active', 'inactive'])->default('active');
+            // $table->foreignId('stage_id')->constrained('stages')->cascadeOnDelete();
             $table->timestamps();
         });
     }

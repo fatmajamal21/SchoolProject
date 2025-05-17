@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Grade;
+use App\Models\Section;
 use App\Models\Stage;
 use Illuminate\Database\Seeder;
 
@@ -21,7 +22,9 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-
+        // Stage::create([
+        //     'name' => 'المرحلة الثانوية',
+        // ]);
         // Stage::create([
         //     'name' => 'المرحلة الإبتدائية',
         //     'tag' => 'p',
@@ -35,12 +38,16 @@ class DatabaseSeeder extends Seeder
         //     'tag' => 'h',
         // ]);
 
-        // $stagep = Stage::getIdByTag('p');
+        // $stagep = Stage::getIdByTag('m');
         // Grade::create([
-        //     'name' => 'الصف الأول',
+        //     'name' => 'الصف الثامن',
         //     'stage_id' => $stagep,
-        //     'tag' => '1',
-
+        //     'tag' => '8',
+        // ]);
+        // Section::create([
+        //     'name' => '3 ',
+        //     'created_at' => '2025-04-30 07:13:49',
+        //     'updated_at' => '2025-04-30 07:13:49',
         // ]);
     }
 }
