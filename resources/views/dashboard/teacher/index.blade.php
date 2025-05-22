@@ -135,15 +135,17 @@
                 <div class="invalid-feedback" id="error-name"></div>
            </div>
 <div class="mb-4">
-    <label for="password" style="font-size: 16px">تغيير كلمة السر (اختياري)</label>
+    <label for="password_update" style="font-size: 16px">تغيير كلمة السر (اختياري)</label>
     <input type="password" class="form-control mt-2" id="password_update" name="password" placeholder="تغيير كلمة السر">
-      <div class="invalid-feedback" id="error-name"></div>
+    <div class="invalid-feedback" id="error-password"></div>
 </div>
 <div class="mb-4">
-    <label for="password" style="font-size: 16px">تاكيد كلمة السر </label>
-    <input type="password" class="form-control mt-2" id="password_update" name="password" placeholder="تغيير كلمة السر">
-      <div class="invalid-feedback" id="error-name"></div>
+    <label for="password_confirmation_update" style="font-size: 16px">تأكيد كلمة السر</label>
+    <input type="password" class="form-control mt-2" id="password_confirmation_update" name="password_confirmation" placeholder="تأكيد كلمة السر">
+    <div class="invalid-feedback" id="error-password_confirmation"></div>
 </div>
+
+
 
           <div class="mb-4">
               <label for="count_section" style="font-size: 16px">التخصص الجامعي</label>
@@ -448,9 +450,9 @@ url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
         processData: false,
         contentType: false,
         success: function(response) {
-            $('#add-modal').modal('hide');
-            $('#add-form')[0].reset();
-            table.draw();
+     $('#add-modal').modal('hide');  // إغلاق المودال
+    $('#add-form')[0].reset();      // تفريغ الحقول
+    table.draw();                  // تحديث الجدول
         },
         error: function(xhr) {
             if (xhr.status === 422) { // Validation error
