@@ -188,7 +188,7 @@
        </div>
 
       <div class="modal-footer">
-          <button type="submit" class="btn btn-primary col-12"> إضافة</button>
+          <button type="submit" class="btn btn-info col-12"> تعديل</button>
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">إغلاق</button>
       </div>
         </form>
@@ -236,7 +236,7 @@
                   <th> رقم الهاتف</th>
                   <th>تاريخ الميلاد</th>
                   <th> الايميل</th>
-                   <th> كلمة السر</th>
+                   {{-- <th> كلمة السر</th> --}}
                    <th>التخصص الجامعي</th>
                    <th> المؤهل العلمي</th>
                    <th> الجنس</th>
@@ -305,14 +305,14 @@ columns:[
  searchable :false ,
 }
 ,
-{
+// {
 
-  data: 'password' ,
- name: 'password' ,
- title :' كلمة السر' ,
- orderable: false ,
- searchable :false ,
- },
+//   data: 'password' ,
+//  name: 'password' ,
+//  title :' كلمة السر' ,
+//  orderable: false ,
+//  searchable :false ,
+//  },
  {
     data: 'university_major' ,
  name: 'university_major' ,
@@ -552,27 +552,79 @@ url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
 
 
     // حذف معلم
-    $(document).on('click', '.delete_btn', function() {
-        if (!confirm('هل أنت متأكد من حذف هذا المعلم؟')) {
-            return;
-        }
-        let id = $(this).data('id');
+    // $(document).on('click', '.delete_btn', function() {
+    //     if (!confirm('هل أنت متأكد من حذف هذا المعلم؟')) {
+    //         return;
+    //     }
+    //     let id = $(this).data('id');
 
-        $.ajax({
-            url: '{{ route("dash.teacher.delete") }}',
-            method: 'POST',
-            data: {
-                id: id,
-                _token: '{{ csrf_token() }}'
-            },
-            success: function(response) {
-                table.draw();
-            },
-            error: function() {
-                alert('حدث خطأ أثناء الحذف');
-            }
-        });
+    //     $.ajax({
+    //         url: '{{ route("dash.teacher.delete") }}',
+    //         method: 'POST',
+    //         data: {
+    //             id: id,
+    //             _token: '{{ csrf_token() }}'
+    //         },
+    //         success: function(response) {
+    //             table.draw();
+    //         },
+    //         error: function() {
+    //             alert('حدث خطأ أثناء الحذف');
+    //         }
+    //     });
+    // });
+
+        // حذف معلم باستخدام SweetAlert
+   // حذف معلم باستخدام SweetAlert
+$(document).on('click', '.delete_btn', function(e) {
+    e.preventDefault();
+
+    let button = $(this);
+    let id = button.data('id');
+
+    Swal.fire({
+        title: 'هل أنت متأكد من الحذف؟',
+        text: "لن تتمكن من التراجع عن هذا!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'نعم، احذف',
+        cancelButtonText: 'إلغاء',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '{{ route("dash.teacher.delete") }}',
+                method: 'POST',
+                data: {
+                    id: id,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    Swal.fire(
+                        'تم الحذف!',
+                        'تم حذف المعلم بنجاح.',
+                        'success'
+                    );
+                    table.draw();
+                },
+                error: function(xhr) {
+                    let errorMessage = 'حدث خطأ أثناء الحذف.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+                    Swal.fire('خطأ!', errorMessage, 'error');
+                }
+            });
+        }
     });
+});
+
+
+
+
+
+
+    
 });
 
 

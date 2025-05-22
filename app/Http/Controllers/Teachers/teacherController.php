@@ -62,12 +62,9 @@ class teacherController extends Controller
                 $data_attr .= 'data-date_of_appointment ="' . $qur->date_of_appointment . '" ';
                 $data_attr .= 'data-status ="' . $qur->status . '"';
 
-                $action = '<div class="d-flex align-items-center gap-3 fs-6">'
-                    . '<a ' . $data_attr . ' href="javascript:;" class="update_btn text-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit info" aria-label="Edit">'
-                    . '<i class="bi bi-pencil-fill"></i></a>'
-                    . '<a href="javascript:;" class="delete_btn text-danger" data-id="' . $qur->id . '" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete">'
-                    . '<i class="bi bi-trash-fill"></i></a>'
-                    . '</div>';
+                $action = '<div class="d-flex align-items-center gap-3 fs-6"><a ' . $data_attr . ' href="javascript:;" class="update_btn text-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit info" aria-label="Edit"><i class="bi bi-pencil-fill"></i></a>
+                <a href="javascript:;" class="delete_btn text-danger" class="delete_btn" data-id="' . $qur->id . '" title="Delete"><i class="bi bi-trash-fill"></i></a>
+                  </div>';
 
                 return $action;
             })
@@ -183,22 +180,17 @@ class teacherController extends Controller
     // دالة delete تبقى كما هي، لا تحتاج تغيير خاص بالـ password
 
 
-    function delete(Request $request)
+
+    public function delete(Request $request)
     {
         $request->validate([
             'id' => 'required|exists:teachers,id',
         ]);
 
-        $teacher = Teacher::findOrFail($request->id);
-        $user = User::findOrFail($teacher->user_id);
-
-        // حذف المعلم والمستخدم (يمكن إضافة معاملة قاعدة بيانات Transaction)
+        $teacher = Teacher::find($request->id);
         $teacher->delete();
-        $user->delete();
 
-        return response()->json([
-            'success' => 'تم الحذف بنجاح',
-        ]);
+        return response()->json(['message' => 'تم الحذف بنجاح']);
     }
 }
 

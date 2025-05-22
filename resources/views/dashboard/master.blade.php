@@ -30,6 +30,8 @@
   <link href="{{asset('dashboard/assets/css/header-colors.css')}}" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/toastr/app-assets/vendors/css/extensions/toastr.min.css') }}">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <style>
     .modal-dialog-scrollable .model-body{
     max-height: 70px;
