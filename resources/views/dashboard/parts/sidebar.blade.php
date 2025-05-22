@@ -35,7 +35,18 @@
         </li>
       </ul>
     </li>
-    <li class="menu-label">UI Elements</li>
+    <li class="menu-label"> جميع الإدارات </li>
+        <li>
+      <a class="has-arrow" href="javascript:;">
+        <div class="parent-icon"><i class="bi bi-award-fill"></i>
+        </div>
+        <div class="menu-title">المعلمين</div>
+      </a>
+      <ul>
+        <li> <a href="{{route('dash.teacher.index')}}"> <i class="bi bi-person-circle"></i>جميع المعلمون</a>
+        </li>  
+      </ul>
+    </li>
     <li>
       <a href="javascript:;" class="has-arrow">
         <div class="parent-icon"><i class="bi bi-building"></i></i>

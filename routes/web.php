@@ -4,6 +4,7 @@ use App\Http\Controllers\grades\GradeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\section\SectionController;
 use App\Http\Controllers\stages\StageCotroller;
+use App\Http\Controllers\Teachers\teacherController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -23,7 +24,6 @@ Route::prefix('SchoolProject/')->group(function () {
             Route::get('/getactive', 'getactive')->name('getactive');
             Route::get('/getactivesection', 'getactivesection')->name('getactivesection');
             Route::get('/getactivestage', 'getactivestage')->name('getactivestage');
-            Route::get('/create', 'create')->name('create');
             Route::post('/add', 'add')->name('add');
             Route::post('/addsection', 'addsection')->name('addsection');
             Route::post('/changemaster', 'changemaster')->name('changemaster');
@@ -32,18 +32,31 @@ Route::prefix('SchoolProject/')->group(function () {
 
         Route::prefix('sections/')->controller(SectionController::class)->name('section.')->group(function () {
             Route::get('/', 'index')->name('index');
-            Route::get('/getSectionsData', 'getSectionsData')->name('getSectionsData');
             Route::get('/getdata', 'getdata')->name('getdata');
-            Route::get('/getactive', 'getactive')->name('getactive');
-            Route::get('/getactivesection', 'getactivesection')->name('getactivesection');
-            Route::get('/getactivestage', 'getactivestage')->name('getactivestage');
-            Route::get('/create', 'create')->name('create');
             Route::post('/add', 'add')->name('add');
-            Route::post('/addsection', 'addsection')->name('addsection');
-            Route::post('/changemaster', 'changemaster')->name('changemaster');
+            Route::post('/changestatus', 'changestatus')->name('changestatus');
+            Route::post('/changestatus2', 'changestatus2')->name('changestatus2');
+        });
+
+        Route::prefix('teachers/')->controller(teacherController::class)->name('teacher.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/getdata', 'getdata')->name('getdata');
+            Route::post('/add', 'add')->name('add');
+            Route::post('/update', 'update')->name('update');
+            Route::post('/delete', 'delete')->name('delete');
         });
     });
 });
+
+
+
+
+
+
+
+
+
+
 
 
 

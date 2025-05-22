@@ -27,38 +27,62 @@ class SectionController extends Controller
             ->addColumn('name', function ($qur) {
                 if ($qur->status == 'active') {
                     return ' الشعبة ' . ' ' . "'$qur->name'";
-                    // return ' الشعبة ' . ' ' . $qur->name;
                 }
                 return '-';
             })
             ->addColumn('action', function ($qur) {
-                if ($qur->status == 'active') {
-                    return '';
+                $lastSection =  Section::query()->where('status', 'active')->orderBy('id', 'desc')->first();
+                $sectionondisble = Section::query()->where('status', 'inactive')->first();
+
+
+                if ($lastSection->id == $qur->id) {
+                    return '<div data-status ="inactive" data-id="' . $qur->id . '" class=" active-section-switch form-check form-switch">
+                             <input class="form-check-input" type="checkbox" role="switch" id="switchCheckChecked" checked>
+                     
+                   </div>';
                 }
-                return '-';
+                //@ : اقبل ال unll عادي بدون اخطاء
+                if (@$sectionondisble->id == $qur->id) {
+                    return '<div data-status ="active" data-id="' . $qur->id . '" class=" active-section-switch form-check form-switch">
+                           <input class="form-check-input" type="checkbox" role="switch" id="switchCheckChecked">
+                           </div>';
+                }
             })
+            ->addColumn('action2', function ($qur) {
+                if ($qur->status == 'active') {
+
+                    return '<div>
+                         <button class="btn btn-success" disabled title="مفعل">
+                        <i class="lni lni-checkmark"></i>
+                         </button>
+                        <button class=" active-section-input btn btn-outline-danger toggle-status-btn" data-id="' . $qur->id . '" 
+                        data-status="inactive" title="تعطيل">
+                          <i class="lni lni-close"></i>
+                          </button>
+                        </div> ';
+                } else {
+
+                    return ' <div>
+                                    <button class=" active-section-input btn btn-outline-success toggle-status-btn" data-id="' . $qur->id . '" 
+                                    data-status="active" title="تفعيل">
+                               <i class="lni lni-checkmark"></i>
+                                    </button>
+                                <button class="btn btn-danger" disabled title="غير مفعل">
+                                  <i class="lni lni-close"></i>
+                          </button>
+                                   </div>';
+                }
+            })
+
             ->addColumn('status', function ($qur) {
                 if ($qur->status == 'active') {
                     return ' مفعل ';
                 }
                 return 'غير مفعل ';
-            })
+            })->rawColumns(['action', 'action2'])
             ->make(true);
     }
-    // // public function store(Request $request)
-    // // {
-    // //     $request->validate([
-    // //         'name' => 'required|unique:sections,name',
-    // //         'status' => 'required|in:active,inactive',
-    // //     ]);
 
-    // //     Section::create([
-    // //         'name' => $request->name,
-    // //         'status' => $request->status,
-    // //     ]);
-
-    // //     return response()->json(['success' => 'تم إضافة القسم بنجاح']);
-    // // }
 
     public function add(Request $request)
     {
@@ -69,17 +93,18 @@ class SectionController extends Controller
         if ($newCount  >    $currentCount) {
 
             // لتشغيل الشعب الغير مفعلة
-            $sectuinInActive = Section::query()->where('status', 'inactive')->get();
-            foreach ($sectuinInActive as $aa) {
+            $sectionInActive = Section::query()->where('status', 'inactive')->get();
+            foreach ($sectionInActive as $aa) {
                 $aa->update([
                     "status" => 'active',
                 ]);
             }
 
+
+
             //لانشاء شعب جديدة بالرقم المدخل المطلوب ومفعلات
             for ($i = $currentCount + 1; $i <= $newCount; $i++) {
                 Section::create([
-                    // "name" => 'الشعبة ' . $i,
                     "name" => $i,
                     "status" => 'active',
                 ]);
@@ -108,228 +133,64 @@ class SectionController extends Controller
             'success' => 'تمت التعديل بنجاح',
         ]);
     }
+
+
+    function changestatus(Request $request)
+    {
+        $section = Section::query()->findOrFail($request->id);
+        if ($request->status == 'active') {
+            $section->update([
+                "status" => 'active',
+            ]);
+        } else {
+            $section->update([
+                "status" => 'inactive',
+            ]);
+        }
+
+        return response()->json([
+            'success' => 'تمت التعديل بنجاح',
+        ]);
+    }
+
+
+
+
+    function changestatus2(Request $request)
+    {
+        $section = Section::findOrFail($request->id);
+
+        $newStatus = $request->status;
+
+        if (!in_array($newStatus, ['active', 'inactive'])) {
+            return response()->json([
+                'error' => 'حالة غير صحيحة',
+            ], 422);
+        }
+
+        $section->status = $newStatus;
+        $section->save();
+
+        return response()->json([
+            'success' => 'تم تحديث حالة الشعبة بنجاح',
+            'new_status' => $section->status,
+        ]);
+    }
 }
+// function changestatus2(Request $request)
+// {
+//     $section = Section::query()->findOrFail($request->id);
+//     if ($request->status == 'active') {
+//         $section->update([
+//             "status" => 'inactive',
+//         ]);
+//     } else {
+//         $section->update([
+//             "status" => 'active',
+//         ]);
+//     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //     $sections = Section::query();
-
-    //     return DataTables::of($sections)
-    //         ->addIndexColumn()
-    //         ->addColumn('action', function ($section) {
-    //             return '
-    //                 <button class="btn btn-primary btn-sm edit-btn" data-id="' . $section->id . '">تعديل</button>
-    //                 <button class="btn btn-danger btn-sm delete-btn" data-id="' . $section->id . '">حذف</button>
-    //             ';
-    //         })
-    //         ->addColumn('status', function ($section) {
-    //             return $section->status == 'active' ? 1 : 0;
-    //         })
-    //         ->rawColumns(['action', 'status'])
-    //         ->make(true);
-    // }
-
-    // // public function store(Request $request)
-    // // {
-    // //     $request->validate([
-    // //         'name' => 'required|unique:sections,name',
-    // //         'status' => 'required|in:active,inactive',
-    // //     ]);
-
-    // //     Section::create([
-    // //         'name' => $request->name,
-    // //         'status' => $request->status,
-    // //     ]);
-
-    // //     return response()->json(['success' => 'تم إضافة القسم بنجاح']);
-    // // }
-
-
-    // // public function update(Request $request, $id)
-    // // {
-    // //     $request->validate([
-    // //         'name' => 'required|unique:sections,name,' . $id,
-    // //         'status' => 'required|in:active,inactive',
-    // //     ]);
-
-    // //     $section = Section::findOrFail($id);
-    // //     $section->update([
-    // //         'name' => $request->name,
-    // //         'status' => $request->status,
-    // //     ]);
-
-    // //     return response()->json(['success' => 'تم تحديث القسم بنجاح']);
-    // // }
-
-
-
-
-    // // DT_RowIndex
-    // function getdata(Request $request)
-    // {
-    //     $grades = Grade::query();
-    //     return DataTables::of($grades)->addIndexColumn()
-    //         ->addColumn('section', function ($qur) {
-    //             return response()->json(['data' => Section::all()]);
-    //         })
-    //         ->addColumn('stage', function ($qur) {
-    //             return $qur->stage->name;
-    //         })
-    //         ->addColumn('status', function ($qur) {
-    //             if ($qur->status == 'active') {
-    //                 return ' مفعل ';
-    //             }
-    //             return 'غير مفعل ';
-    //         })
-    //         ->make(true);
-    // }
-
-
-    // function create()
-    // {
-    //     $stages = Stage::all();
-    //     return view('dashboard.grades.create', compact('stages'));
-    // }
-    // public function add(Request $request)
-    // {
-    //     // dd($request->all());
-    //     $request->validate([
-    //         'name' => 'required',
-    //         'stage' => 'required',
-    //         'status' => 'required',
-    //         'tag' => 'required',
-    //     ], [
-    //         'name.required' => 'يرجى إدخال حقل الاسم',
-    //         'stage.required' => 'يرجى إدخال حقل المرحلة',
-    //         'status.required' => 'يرجى إدخال حقل المرحلة',
-    //         'tag.required' => 'يرجى إدخال حقل المرحلة',
-    //     ]);
-    //     $stage_id = Stage::getIdByTag($request->stage);
-    //     $status = Grade::getStatusByCode($request->status);
-    //     $grade = Grade::query()->where('tag', $request->tag)->first();
-
-    //     $grade->update([
-    //         'name' => $request->name,
-    //         'tag' => $request->tag,
-    //         'stage_id' => $stage_id,
-    //         'status' => $status,
-    //     ]);
-    //     return response()->json([
-    //         'success' => 'تمت العملية'
-    //     ]);
-    // }
-    // function getactive()
-    // {
-    //     $actives = Grade::query()->where('status', 'active')->pluck('tag');
-    //     // dd($actives);
-    //     return response()->json([
-    //         'tags' => $actives
-    //     ]);
-    // }
-
-    // ///////////////////////////////////
-
-
-    // function getactivestage()
-    // {
-    //     $actives = Stage::query()->where('status', 'active')->pluck('tag');
-    //     // dd($actives);
-    //     return response()->json([
-    //         'tags' => $actives
-    //     ]);
-    // }
-
-
-    // function addsection(Request $request)
-    // {
-    //     // dd($request->all());
-    //     $section = Section::query()->where('name', $request->section)->first();
-    //     $grade = Grade::query()->where('tag', $request->gradetag)->first();
-
-    //     if ($request->status == '1') {
-    //         $status = 'active';
-    //     } else {
-    //         $status = 'inactive';
-    //     }
-
-    //     //لو ما كانوا مع بعض في نفس الرو يعمل update
-    //     //ولو ما كانوا موجودين يعمل create
-    //     //section_id= 1
-    //     //grade_id=2 
-    //     //هذول ممنوع يلتقوا في صف =>عشان تصير عملية انشاء create
-    //     //لكن اذا التقوا بنفس الصف بنعمل اله تعديل update
-    //     GradeSection::query()->updateOrCreate([
-    //         'grade_id' => $grade->id,
-    //         'section_id' => $section->id,
-    //     ], [
-    //         'status' => $status,
-    //     ]);
-    //     return response()->json([
-    //         'success' => 'تمت العملية'
-    //     ]);
-    // }
-
-
-    // function getactivesection(Request $request)
-    // {
-    //     dd($request->all());
-    //     $actives = GradeSection::query()->where('status', 'active')->where('gradeid', $request->gradeId)->get()->pluck('section.name');
-    //     //مخزن عندي الاسم رقم في الانبت  "name" 
-    //     // dd($actives);
-    //     return response()->json([
-    //         'names' => $actives
-    //     ]);
-    // }
-
-    // function changemaster(Request $request)
-    // {
-    //     $stage = Stage::query()->where('tag', $request->tag)->first();
-    //     $gradesActive = Grade::query()->where('status', 'active')->where('stage_id', $stage->id)->get();
-    //     // dd($gradesActive);
-
-
-    //     if ($request->status == 1) {
-    //         $stage->update([
-    //             'status' => 'active',
-    //         ]);
-    //     } else {
-    //         $stage->update([
-    //             'status' => 'inactive',
-    //         ]);
-    //         foreach ($gradesActive as $g) {
-    //             $g->update([
-    //                 'status' => 'inactive',
-    //             ]);
-    //         }
-    //     }
-    //     return response()->json([
-    //         'success' => 'تمت التعديل بنجاح',
-    //     ]);
-
-    //     // dd($gradesActive);
-    // }
+//     return response()->json([
+//         'success' => 'تمت التعديل بنجاح',
+//     ]);
 // }

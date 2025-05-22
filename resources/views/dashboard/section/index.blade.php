@@ -10,7 +10,7 @@
     اضافة  شُعب
   </button>
   </div>
-  <br><br>
+  
 
 
 {{-- المودل للصفوف --}}
@@ -21,16 +21,14 @@
         <h5 class="modal-title" id="sectionsModalLabel">إضافة عدد الشُعب</h5>
       </div>
 
-      <div class="modal-body">
+      <div  class="modal-body">
         <div class="container">
-          <form method="POST" id="add-form" class="add-form">
-            @csrf {{-- حماية من CSRF --}}
-            
+          <form action="{{ route('dash.section.add') }}" method="POST" id="add-form" class="add-form">
+            @csrf 
             <div class="mb-4">
               <label for="count_section" style="font-size: 16px">أدخل عدد الشُعب المرغوب فيها</label>
               <input 
-                class="form-control mt-2" type="number" name="count_section" id="count_section"   min="1"  >
-              {{-- مساحة لرسائل الخطأ في المستقبل --}}
+                class="form-control mt-2" type="number" name="count_section" id="count_section"   min="1" >
               <div class="invalid-feedback" id="count_section_error" style="display:none;"></div>
             </div>
 
@@ -48,35 +46,6 @@
   </div>
 </div>
 
-
-  {{-- <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="sectionsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="sectionsModalLabel"> الشُعب </h5>
-    
-        </div>
-
-          <div class="modal-body">    
-            <div class="container">
-              <form method="POST" id="add-form" class="add-form">
-               <input type="hidden" name="_token" value="{{csrf_token()}}">
-            <div class="mb-4">
-      <label style="font-size: 16px" for="">ادخل عدد الشعب المرغوب فيها</label>
-      <input class="form-control mt-2" type="text" name="count_section" id="" placeholder="ادخل اسم الشعبة">
-      </div>
-         <button type="submit" class="btn btn-primary col-12" >اضافة </button>
-              </form>
-            </div>
-            </div>
-          
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">اغلاق</button>
-         </div>
-        </div>
-
-    </div>
-  </div> --}}
 
  <div class="row">
     <div class="col-12 col-lg-12 col-xl-12 d-flex">
@@ -117,6 +86,7 @@
                   {{-- <th>المرحلة</th> --}}
                   <th> الحالة</th>
                   <th>العمليات</th>
+                   <th>العمليات2</th>
                 </tr>
               </thead>
               <tbody>
@@ -169,7 +139,15 @@ columns:[
  title :'العمليات' ,
  orderable: false ,
  searchable :false ,
-}
+},
+ {
+    data: 'action2' ,
+ name: 'action2' ,
+ title :'العمليات2' ,
+ orderable: false ,
+ searchable :false ,
+ }
+
 ],
 
 language:{
@@ -180,11 +158,13 @@ url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
     $('.add-form').on('submit', function (e) {
      e.preventDefault();
      var data = new FormData(this);
+     var url = $(this).attr('action');
+     var type = $(this).attr('method');
     //  alert('ahmed');
 // name=ali&gender=18& ....
         $.ajax({
-            url: "{{ route('dash.section.add') }}", 
-            type: "POST",
+            url: url, 
+            type: type,
             //بمنع ارسل البيانات نص
             processData: false ,
             // بخلي المتصفح الي يححد النوع للبيانات المرسلة
@@ -192,7 +172,9 @@ url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
             data: data ,
 
           success: function (res) {
-              toastr.success(res.success);
+          $('#addModal').modal('hide');  // إذا لديك مودال
+            $('#add-form').trigger('reset');
+              // toastr.success(res.success);
               table.draw(); 
             },
             error: function (res) {
@@ -200,7 +182,88 @@ url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
             }
         });
     });
-   
+
+
+     $(document).ready(function(){
+         $(document).on('change' , '.active-section-switch' , function(e){
+              var id = $(this).data('id');
+              var status = $(this).data('status');
+              e.preventDefault();
+              
+        $.ajax({
+            url: "{{ route('dash.section.changestatus') }}", 
+            type: "POST",
+           data: {
+                    'id': id,
+                    'status':status , 
+                   '_token': "{{ csrf_token() }}" ,
+                  },
+
+          success: function (res) {
+              // toastr.success(res.success);
+              table.draw(); 
+            },
+            error: function (res) {
+                alert('حدث مشكلة في الكود');
+            }
+        });
+    });
+ 
+
+
+    $(document).on('click', '.toggle-status-btn', function(e) {
+    e.preventDefault();
+
+    // var parentDiv = $(this).closest('.active-section-input');
+
+    var id =  $(this).data('id');
+    var status = $(this).data('status');
+
+    $.ajax({
+        url: "{{ route('dash.section.changestatus2') }}",
+        type: "POST",
+        data: {
+            'id': id,
+            'status': status,
+            '_token': "{{ csrf_token() }}"
+        },
+        success: function(res) {
+            // toastr.success(res.success);
+            table.draw();  
+        },
+        error: function(res) {
+            alert('حدثت مشكلة في تحديث الحالة');
+        }
+    });
+});
+
+  //  $(document).on('click' , '.active-section-input' , function(e){
+  // e.preventDefault();
+  // var id = $(this).data('id');
+  // var status = $(this).data('status');
+
+  // $.ajax({
+  //     url: "{{ route('dash.section.changestatus2') }}",
+  //     type: "POST",
+  //     data: {
+  //         'id': id,
+  //         'status': status,
+  //         '_token': "{{ csrf_token() }}"
+  //     },
+  //     success: function(res) {
+  //         toastr.success(res.success);
+  //         table.draw();  // إعادة تحميل بيانات الجدول
+  //     },
+  //     error: function(res) {
+  //         alert('حدثت مشكلة في تحديث الحالة');
+  //     }
+  //     });
+  // });
+    
+
+ })
+
+         
   
 
 
@@ -408,6 +471,5 @@ url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
 
 
 
-
-    </script> 
+    </script>
 @stop

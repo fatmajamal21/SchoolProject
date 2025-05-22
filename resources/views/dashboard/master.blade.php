@@ -28,7 +28,15 @@
   <link href="{{asset('dashboard/assets/css/light-theme.css')}}" rel="stylesheet" />
   <link href="{{asset('dashboard/assets/css/semi-dark.css')}}" rel="stylesheet" />
   <link href="{{asset('dashboard/assets/css/header-colors.css')}}" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/toastr/app-assets/vendors/css/extensions/toastr.min.css') }}">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    .modal-dialog-scrollable .model-body{
+    max-height: 70px;
+    overflow: auto;
+
+    }
+  </style>
   <title>@yield('title')</title>
 </head>
 
@@ -571,7 +579,56 @@
   <script src="{{ asset('datatable_custom/js/vendor/jquery.dataTables.min.js') }}"></script>
   <script src="{{ asset('datatable_custom/js/vendor/dataTables.bootstrap5.js') }}"></script>
   <script src="{{ asset('datatable_custom/js/vendor/dataTables.responsive.min.js') }}"></script>
+  <script src="{{ asset('dashboard/toastr/app-assets/vendors/js/extensions/toastr.min.js') }}"></script>
+  
 
+  <script>
+        $('.add-form').on('submit', function (e) {
+     e.preventDefault();
+     var data = new FormData(this);
+     var url = $(this).attr('action');
+     var type = $(this).attr('method');
+        $.ajax({
+            url: url, 
+            type: type,
+            processData: false ,
+            contentType: false , 
+            data: data ,
+
+          success: function (res) {
+          $('#addModal').modal('hide'); 
+            $('#add-form').trigger('reset');
+              table.draw(); 
+            },
+            error: function (res) {
+                alert('حدث مشكلة في الكود');
+            }
+        });
+    });
+
+            $('.update-form').on('submit', function (e) {
+     e.preventDefault();
+     var data = new FormData(this);
+     var url = $(this).attr('action');
+     var type = $(this).attr('method');
+        $.ajax({
+            url: url, 
+            type: type,
+            processData: false ,
+            contentType: false , 
+            data: data ,
+
+          success: function (res) {
+          $('#update_modal').modal('hide'); 
+            // $('#update-form').trigger('reset');
+              table.draw(); 
+            },
+            error: function (res) {
+                alert('حدث مشكلة في الكود');
+            }
+        });
+    });
+  </script>
 @yield('js')
 </body>
  
