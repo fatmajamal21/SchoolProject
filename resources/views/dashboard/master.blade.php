@@ -585,6 +585,7 @@
   
 
   <script>
+       $(document).ready(function() {
         $('.add-form').on('submit', function (e) {
      e.preventDefault();
      var data = new FormData(this);
@@ -630,6 +631,92 @@
             }
         });
     });
+
+    $(document).on('click', '.delete_btn', function(e) {
+    e.preventDefault();
+
+    let button = $(this);
+    let id = button.data('id');
+
+    Swal.fire({
+        title: 'هل أنت متأكد من الحذف؟',
+        text: "لن تتمكن من التراجع عن هذا!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'نعم، احذف',
+        cancelButtonText: 'إلغاء',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '{{ route("dash.teacher.delete") }}',
+                method: 'POST',
+                data: {
+                    id: id,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    Swal.fire(
+                        'تم الحذف!',
+                        'تم حذف المعلم بنجاح.',
+                        'success'
+                    );
+                    table.draw();
+                },
+                error: function(xhr) {
+                    let errorMessage = 'حدث خطأ أثناء الحذف.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+                    Swal.fire('خطأ!', errorMessage, 'error');
+                }
+            });
+        }
+    });
+});
+$(document).on('click', '.active_btn1', function(e) {
+    e.preventDefault();
+
+    let button = $(this);
+    let id = button.data('id');
+
+    Swal.fire({
+        title: 'هل أنت متأكد من الحذف؟',
+        text: "لن تتمكن من التراجع عن هذا!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'نعم، احذف',
+        cancelButtonText: 'إلغاء',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '{{ route("dash.teacher.delete") }}',
+                method: 'POST',
+                data: {
+                    id: id,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    Swal.fire(
+                        'تم الحذف!',
+                        'تم حذف المعلم بنجاح.',
+                        'success'
+                    );
+                    table.draw();
+                },
+                error: function(xhr) {
+                    let errorMessage = 'حدث خطأ أثناء الحذف.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+                    Swal.fire('خطأ!', errorMessage, 'error');
+                }
+            });
+        }
+    });
+});
+});
   </script>
 @yield('js')
 </body>

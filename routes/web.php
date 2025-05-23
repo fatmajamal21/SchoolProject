@@ -44,6 +44,7 @@ Route::prefix('SchoolProject/')->group(function () {
             Route::post('/add', 'add')->name('add');
             Route::post('/update', 'update')->name('update');
             Route::post('/delete', 'delete')->name('delete');
+            Route::post('/active1', 'active1')->name('active1');
         });
     });
 });

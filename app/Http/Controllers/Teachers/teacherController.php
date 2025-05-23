@@ -36,25 +36,25 @@ class teacherController extends Controller
             })
             ->addColumn('gender', function ($qur) {
                 if ($qur->gender == 'male') {
-                    return 'ذكر';
+                    return ' <span class="badge bg-info">ذكر</span> ';
                 }
-                return ' أنثى';
+                return ' <span class="badge"style="background-color: #c74375">انثى</span> ';
             })
             ->addColumn('academic_qualification', function ($qur) {
                 return $qur->get_academic_qualification_code($qur->academic_qualification);
             })
             ->addColumn('status', function ($qur) {
                 if ($qur->status == 'active') {
-                    return ' مفعل ';
+                    return ' <span class="badge bg-success">مفعل</span> ';
                 }
-                return 'غير مفعل ';
+                return ' <span class="badge bg-secondary">معطل </span>';
             })
             ->addColumn('action', function ($qur) {
                 $data_attr = '';
                 $data_attr .= 'data-id ="' . $qur->id . '" ';
                 $data_attr .= 'data-name ="' . $qur->name . '" ';
                 $data_attr .= 'data-phone ="' . $qur->phone . '" ';
-                $data_attr .= 'data-email ="' . $qur->user->email . '" ';
+                $data_attr .= 'data-email ="' . $qur->user->email .  '" ';
                 $data_attr .= 'data-date_of_birth ="' . $qur->date_of_birth . '" ';
                 $data_attr .= 'data-university_major ="' . $qur->university_major . '" ';
                 $data_attr .= 'data-academic_qualification ="' . $qur->academic_qualification . '" ';
@@ -62,13 +62,32 @@ class teacherController extends Controller
                 $data_attr .= 'data-date_of_appointment ="' . $qur->date_of_appointment . '" ';
                 $data_attr .= 'data-status ="' . $qur->status . '"';
 
-                $action = '<div class="d-flex align-items-center gap-3 fs-6"><a ' . $data_attr . ' href="javascript:;" class="update_btn text-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit info" aria-label="Edit"><i class="bi bi-pencil-fill"></i></a>
-                <a href="javascript:;" class="delete_btn text-danger" class="delete_btn" data-id="' . $qur->id . '" title="Delete"><i class="bi bi-trash-fill"></i></a>
-                  </div>';
+                // $action = '<div class="d-flex align-items-center gap-3 fs-6">
+                // <a ' . $data_attr . ' href="javascript:;" class="update_btn text-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit info" aria-label="Edit">
+                // <i class="bi bi-pencil-fill"></i></a>
+                // <a ' . $data_attr . ' href="javascript:;" class="delete_btn text-danger" class="delete_btn" data-id="' . $qur->id . '" title="Delete">
+                // <i class="bi bi-trash-fill"></i></a>
+                //   </div>';
+
+                //ربط السابق بالطريقة الجديدة
+                $action = '';
+                $action .= '<div class="d-flex align-items-center gap-3 fs-6">';
+
+                $action .= '<a ' . $data_attr . ' href="javascript:;" class="update_btn text-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit info" aria-label="Edit"><i class="bi bi-pencil-fill"></i></a>';
+
+                if ($qur->status == 'active') {
+                    $action .= '<a ' . $data_attr . ' href="javascript:;" class="delete_btn text-danger"
+                  data-id="' . $qur->id . '" title="Delete">
+                     <i class="bi bi-trash-fill"></i></a>';
+                } else {
+                    $action .= '<div class="active_btn1 col" tabindex="13" data-id="' . $qur->id . '"><i class="text-danger fadeIn animated bx bx-message-square-check"></i></div>';
+                }
+
+                $action .= '  </div>';
 
                 return $action;
             })
-
+            ->rawColumns(['status', 'action', 'gender'])
             ->make(true);
     }
     // داخل دالة add
@@ -131,7 +150,7 @@ class teacherController extends Controller
         $request->validate([
             'id' => ['required', 'exists:teachers,id'],
             'name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'regex:/^[0-9]{8,15}$/'],
+            'phone' => ['required', 'regex:/^[0-9]{8,15}$/', Rule::unique('teachers', 'phone')->ignore($request->id)],
             'date_of_birth' => ['required', 'date', 'before:today', 'after:' . now()->subYears(80)->format('Y-m-d')],
             'university_major' => ['required', 'string', 'max:255'],
             'academic_qualification' => ['required', Rule::in(['diploma', 'bachelors', 'master', 'phD'])],
@@ -188,13 +207,31 @@ class teacherController extends Controller
         ]);
 
         $teacher = Teacher::find($request->id);
-        $teacher->delete();
+        if ($teacher) {
+            $teacher->update([
+                'status' => 'inactive',
+            ]);
+        }
+        // $teacher->delete();
 
         return response()->json(['message' => 'تم الحذف بنجاح']);
     }
+
+    public function active1(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:teachers,id',
+        ]);
+
+        $teacher = Teacher::find($request->id);
+        if ($teacher) {
+            $teacher->update([
+                'status' => 'active',
+            ]);
+        }
+        return response()->json(['message' => 'تم التفعيل بنجاح']);
+    }
 }
-
-
 
 
     // function add(Request $request)

@@ -184,7 +184,8 @@
        <div class="mb-4">
               <label for="count_section" style="font-size: 16px"> تاريخ التعيين</label>
               <input type="date" class="form-control mt-2" id="date_of_appointment"  name="date_of_appointment"  placeholder="تاريخ الإصدار">
-                  <div class="invalid-feedback" id="error-name"></div>
+                  <div  class="invalid-feedback" id="error-name"></div>
+                  
        </div>
        </div>
        </div>
@@ -621,12 +622,50 @@ $(document).on('click', '.delete_btn', function(e) {
     });
 });
 
+$(document).on('click', '.active_btn1', function(e) {
+    e.preventDefault();
 
+    let button = $(this);
+    let id = button.data('id');
+    // let url = button.data('url');
 
+    Swal.fire({
+        title: 'هل أنت متأكد من تفعيل هذا المعلم',
+        text: "لن تتمكن من التراجع عن هذا!",
+        icon: 'success',
+        showCancelButton: true,
+        confirmButtonText: 'نعم، فعّل',
+        cancelButtonText: 'إلغاء',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '{{ route("dash.teacher.active1") }}',
+                method: 'POST',
+                data: {
+                    id: id,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    Swal.fire(
+                        'تم التفعيل!',
+                        'تم التفعيل المعلم بنجاح.',
+                        'success'
+                    );
+                    table.draw();
+                },
+                error: function(xhr) {
+                    let errorMessage = 'حدث خطأ أثناء التفعيل.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+                    Swal.fire('خطأ!', errorMessage, 'error');
+                }
+            });
+        }
+    });
+});
 
-
-
-    
 });
 
 
