@@ -71,18 +71,18 @@ Route::prefix('SchoolProject/')->group(function () {
             Route::post('/delete', 'delete')->name('delete');    // dash.subject.delete
             Route::post('/activate', 'activate')->name('activate'); // dash.subject.activate
         });
-        Route::prefix('students')->controller(StudentController::class)->name('student.')->group(function () {
-            Route::get('/', 'index')->name('index');           // dash.subject.index
-            Route::get('/getdata', 'getData')->name('getdata'); // dash.subject.getdata
-            Route::get('/getdata/lectuers', 'getDataLectuers')->name('getdata.lectuers');
-
-            Route::get('/download/{filename}', 'download')->name('download'); // dash.subject.getdata
-            Route::get('/lectuers/{id}', 'lectuers')->name('lectuers'); // dash.subject.lectuers
-
-            Route::post('/add', 'add')->name('add');             // dash.subject.add
-            Route::post('/update', 'update')->name('update');    // dash.subject.update
-            Route::post('/delete', 'delete')->name('delete');    // dash.subject.delete
-            Route::post('/activate', 'activate')->name('activate'); // dash.subject.activate
+        Route::prefix('students/')->controller(StudentController::class)->name('student.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/getdata', 'getdata')->name('getdata');
+            Route::get('/getdata/lectures', 'getdataLectures')->name('getdata.lectures');
+            Route::get('/lectures/{id}', 'lectures')->name('lectures');
+            Route::get('/download/{filename}', 'download')->name('download');
+            Route::get('/export', 'export')->name('export');
+            Route::post('/import', 'import')->name('import');
+            Route::post('/add', 'add')->name('add');
+            Route::post('/update', 'update')->name('update');
+            Route::post('/delete', 'delete')->name('delete');
+            Route::post('/active', 'active')->name('active');
         });
         Route::prefix('mean')->controller(meancontroller::class)->name('mean.')->group(function () {
             Route::get('/', 'index')->name('index');

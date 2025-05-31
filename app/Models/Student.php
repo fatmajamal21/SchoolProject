@@ -9,16 +9,18 @@ class Student extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    function section()
+    public function user()
     {
-        return $this->belongsTo(Section::class);
+        return $this->belongsTo(User::class);
     }
+
     public function grade()
     {
         return $this->belongsTo(Grade::class);
     }
-    public function user()
+
+    public function section()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Section::class);
     }
 }
