@@ -1,7 +1,7 @@
 
 @extends('dashboard.master')
 @section('title')
-مدرسة بنات معن  | الصفحة الرئيسية في المستويات
+مدرسة خانيونس للبنين   | الصفحة الرئيسية في المستويات
 @stop
 @section('page-content')
 <main class="page-content">
@@ -309,8 +309,7 @@ url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
 
       success: function (res) {
                 // console.log(res.message);
-
-                    toastr.success(res.success);
+                    // toastr.success(res.success);
                 // fبروح يطلب كل التيبل ملارة تانية وبحدثهم 
                 table.draw(); 
             },
@@ -398,7 +397,7 @@ url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
       success: function (res) {
                 // console.log(res.message);
 
-                toastr.success(res.success);
+                // toastr.success(res.success);
 
                 // fبروح يطلب كل التيبل ملارة تانية وبحدثهم 
                 table.draw(); 
@@ -426,7 +425,7 @@ url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
 
       success: function (res) {
                 // console.log(res.message);
-                toastr.success(res.success);
+                // toastr.success(res.success);
 
                 // fبروح يطلب كل التيبل ملارة تانية وبحدثهم 
                 table.draw(); 

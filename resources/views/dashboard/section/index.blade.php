@@ -1,7 +1,7 @@
 
 @extends('dashboard.master')
 @section('title')
-مدرسة بنات معن  | الصفحة الرئيسية في المستويات
+مدرسة خانيونس للبنين   | الصفحة الرئيسية للشعب الدراسية 
 @stop
 @section('page-content')
 <main class="page-content">

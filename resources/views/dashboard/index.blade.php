@@ -643,7 +643,7 @@
                        <div class="progress-bar bg-primary" role="progressbar" style="width: 20%;"></div>
                      </div>
                    </div>
-                    <p class="product-name mb-0 mt-2 fs-6">Sports Time Watch <span class="float-end">245</span></p>
+                    <p class="product-name mb-0 mt-2 fs-6">Sports Time Watch<span class="float-end">245</span></p>
                   </div>
                 </div>
               </div>

@@ -26,9 +26,24 @@ class teacherController extends Controller
 
     function getdata(Request $request)
     {
-        $sections = Teacher::query();
-        return DataTables::of($sections)->addIndexColumn()
+        //  $grades = Teacher::select('teachers.*', 'users.email')
+        //       ->join('users', 'users.id', '=', 'teachers.user_id');
+        // $sections = Teacher::query();
+        $sections = Teacher::select('teachers.*', 'users.email')
+            ->join('users', 'users.id', '=', 'teachers.user_id');
 
+        return DataTables::of($sections)->addIndexColumn()
+            ->filter(function ($qur) use ($request) {
+                if ($request->get('name')) {
+                    $qur->where('teachers.name', 'like', '%' . $request->get('name') . '%');
+                }
+                if ($request->get('phone')) {
+                    $qur->where('teachers.phone', 'like', '%' . $request->get('phone') . '%');
+                }
+                if ($request->get('email')) {
+                    $qur->where('users.email', 'like', '%' . $request->get('email') . '%');
+                }
+            })
             ->addColumn('email', function ($qur) {
                 return $qur->user->email;
             })->addColumn('password', function ($qur) {
